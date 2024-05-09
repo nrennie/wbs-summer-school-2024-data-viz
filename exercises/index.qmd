@@ -4,4 +4,17 @@ format: html
 engine: knitr
 filters:
   - webr
+webr:
+  packages: ['ggplot2']
 ---
+
+## R
+
+```{webr-r}
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point()
+```
+
+
+
+## Python
