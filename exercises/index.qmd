@@ -4,6 +4,7 @@ format: html
 engine: knitr
 filters:
   - webr
+  - pyodide
 webr:
   packages: ['ggplot2']
 ---
@@ -15,6 +16,14 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
   geom_point()
 ```
 
-
-
 ## Python
+
+```{pyodide-python}
+n = 5
+while n > 0:
+  print(n)
+  n = n - 1
+
+print('Blastoff!')
+```
+
