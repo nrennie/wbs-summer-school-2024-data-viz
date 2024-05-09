@@ -1,0 +1,742 @@
+---
+title: "Making your data visualisations more effective"
+subtitle: "WBS Behavioural Science Summer School<br><small>4-5 June 2024</small>"
+author: "Dr Nicola Rennie"
+format:
+  LUstyle-revealjs:
+    footer: "{{< fa envelope >}} [n.rennie@lancaster.ac.uk](mailto:n.rennie@lancaster.ac.uk) {{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/) {{< fa brands linkedin >}} [nicola-rennie](https://www.linkedin.com/in/nicola-rennie/)"
+    self-contained: true
+    auto-stretch: false
+execute: 
+  eval: true
+  echo: false
+  warning: false
+fig-cap-location: top
+---
+
+## About me
+
+::: columns
+::: {.column .right width="70%"}
+
+Lecturer in Health Data Science within the [Centre for Health Informatics, Computing, and Statistics](https://chicas.lancaster-university.uk/).
+
+<br>
+
+Background in statistics, operational research (transport), and data science consultancy.
+
+<br>
+
+Collaborate with local NHS trusts on data science projects.
+
+<br>
+
+Co-author of Royal Statistical Society's *Best Practices for Data Visualisation* guidance.
+
+:::
+
+::: {.column width="30%"}
+
+![](images/CHICASlogo.png){fig-align="center" fig-alt="CHICAS logo" width=70%}
+
+:::
+
+:::
+
+## But first, some background!
+
+[How did the Royal Statistical Society’s Best Practices for Data Visualisation guide start?]{.fragment}
+
+[A survey in 2021 asked Royal Statistical Society (RSS) members their views on *Significance* magazine.]{.fragment}
+
+[Respondents were asked, "What aspects of content could be improved?"]{.fragment}
+
+::: incremental
+-   "Better, more consistent charts... I'd like to see a house style like *The Economist*"
+-   "The figures are often difficult to read..."
+-   "The plots sometimes look amateurish..."
+:::
+
+## Help wanted
+
+"RSS publications seek data visualisation expert to develop best practice guidance."
+
+::: columns
+
+::: {.column width="30%"}
+
+![](images/andreas.png){fig-align="left" fig-alt="Photo of Andreas" width=70%}
+
+<small>Andreas Krause, Idorsia Pharmaceuticals</small>
+
+:::
+
+::: {.column width="30%"}
+
+![](images/nicola.jpg){fig-align="left" fig-alt="Photo of Nicola" width=70%}
+
+<small>Nicola Rennie, Lancaster University</small>
+
+:::
+
+::: {.column width="30%"}
+
+![](images/brian.png){fig-align="left" fig-alt="Photo of Brian" width=70%}
+
+<small>Brian Tarran, Royal Statistical Society</small>
+
+:::
+
+:::
+
+## What's the aim of the guide?
+
+The guide would:
+
+::: incremental
+-   Help contributors develop data visualisations that are high quality, readable, effective at conveying information, and fulfill their intended purpose.
+-   Summarise and link to authoritative advice on chart styles and formats for different types of data.
+-   Show how to override software defaults in common data visualisation software and packages.
+:::
+
+## Skip forward quite a few months...
+
+![](images/guide-screenshot.png){fig-align="center" fig-alt="Screenshot of data vis guide homepage" width="65%"}
+
+```{r}
+#| label: setup
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(kableExtra)
+library(RColorBrewer)
+library(datasauRus)
+theme_set(theme_grey(base_size = 18))
+```
+
+## The rest of this talk...
+
+[In this session we will cover...]{.fragment}
+
+::: incremental
+
+* why you should visualise data;
+
+* some guidelines for making better charts;
+
+* examples of good and bad charts!
+
+:::
+
+# The role of visualisation {background-color="#D9DBDB"}
+
+## Why visualise data?
+
+::: columns
+::: {.column width="50%"}
+Data visualisation has two main purposes:
+
+* Exploratory data analysis and identifying data issues
+* Communicating insights and results
+
+:::
+
+::: {.column width="50%"}
+![](images/data_viz_books.png){fig-align="center" fig-alt="book shelf cartoon" width="90%"}
+:::
+:::
+
+## Communicating insights with data visualisation
+
+**Grab attention**
+
+Visualisations stand out. If a reader is short on time or uncertain about whether a document is of interest, an attention-grabbing visualisation may entice them to start reading.
+
+::: {.fragment}
+
+**Improve access to information**
+
+Textual descriptions can be lengthy and hard to read, and are frequently less precise than a visual depiction showing data points and axes.
+
+:::
+
+::: {.fragment}
+
+**Summarise content**
+
+Visual displays allow for summarising complex textual content, aiding the reader in memorising key points.
+
+:::
+
+## Communicating insights with data visualisation
+
+::: columns
+::: {.column width="60%"}
+
+John Snow collected data on cholera deaths and created a visualisation where the number of deaths was represented by the height of a bar at the corresponding address in London.
+
+This visualisation showed that the deaths clustered around Broad Street, which helped identify the cause of the cholera transmission, the Broad Street water pump.
+
+Snow. 1854.
+
+:::
+
+::: {.column width="40%"}
+![](images/Snow-cholera-map.jpg){fig-align="center" fig-alt="John Snow cholera map" width=100%}
+
+:::
+
+:::
+
+## Why do pie charts have a bad reputation?
+
+::: columns
+
+::: {.column}
+
+```{r}
+#| label: pie-uneven
+#| fig-height: 7
+#| fig-width: 7
+par(mai = c(0, 0, 0, 0))
+pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
+```
+
+:::
+
+::: {.column .fragment}
+
+```{r}
+#| label: pie-even
+#| fig-height: 7
+#| fig-width: 7
+par(mai = c(0, 0, 0, 0))
+pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
+```
+
+:::
+
+:::
+
+::: {.fragment}
+
+<small>
+"All variations [of pie charts] lead to overestimation of small values and underestimation of large ones." [Kesara and Skau (2016)](https://diglib.eg.org/bitstream/handle/10.2312/eurovisshort20161167/091-095.pdf)
+</small>
+
+:::
+
+## Why do 3D charts have a bad reputation?
+
+On the plot on the left, how tall is the bar?
+
+![](images/3d.png){fig-align="center" fig-alt="Two 3D bar charts" width="70%"}
+
+## What are you trying to communicate?
+
+Data visualisations must serve a purpose.
+
+Ask yourself:
+
+* What is the purpose?
+* Does the visualisation support the purpose?
+* Is it quick, accurate, and intuitive?
+
+# Elements of charts {background-color="#D9DBDB"}
+
+## Elements of charts
+
+::: columns
+::: {.column width="33%"}
+-   Layout
+-   Aspect ratio
+-   Lines
+-   Points
+:::
+
+::: {.column width="33%"}
+-   Colours
+-   Axes
+-   Symbols
+-   Legends
+:::
+
+::: {.column width="33%"}
+-   Orientation
+-   Auxiliary elements
+-   Dimensionality
+:::
+:::
+
+## Layouts, aspect ratios, and axes
+
+```{r}
+#| label: hist1
+#| fig-align: center
+#| fig-height: 7
+set.seed(1234)
+n <- 30
+facet_df <- tibble(
+  grp = rep(LETTERS[1:5], each = n),
+  x = c(
+    rnorm(n, 50, 3),
+    rnorm(n, 35, 3),
+    rnorm(n, 45, 4),
+    rnorm(n, 47, 4),
+    rnorm(n, 55, 2)
+  )
+)
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5) +
+  labs(x = "Travel time (mins)", y = "") +
+  theme(legend.title = element_blank())
+```
+
+## Layouts, aspect ratios, and axes
+
+```{r}
+#| label: hist2
+#| fig-align: center
+#| fig-height: 7
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~grp, nrow = 1) +
+  labs(x = "Travel time (mins)", y = "") +
+  theme(legend.title = element_blank())
+```
+
+## Layouts, aspect ratios, and axes
+
+```{r}
+#| label: hist3
+#| fig-align: center
+#| fig-height: 7
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~grp, ncol = 1, strip.position = "left") +
+  labs(x = "Travel time (mins)", y = "") +
+  theme(
+    legend.title = element_blank(),
+    strip.text.y.left = element_text(angle = 0)
+  )
+```
+
+## Layouts, aspect ratios, and axes
+
+Longer labels are best on the y-axis, horizontally.
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+#| label: axes
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-height: 7
+plot_data <- gapminder::gapminder |>
+  filter(continent == "Asia")
+ggplot(plot_data, aes(x = country, y = lifeExp)) +
+  geom_boxplot() +
+  xlab("Life expectancy") +
+  ylab("") +
+  theme_bw(base_size = 18)
+```
+
+:::
+
+::: {.column .fragment width="50%"}
+
+```{r}
+#| label: axes-2
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-height: 7
+ggplot(plot_data, aes(y = country, x = lifeExp)) +
+  geom_boxplot() +
+  xlab("Life expectancy") +
+  ylab("") +
+  theme_bw(base_size = 18)
+```
+
+:::
+:::
+
+## Layouts, aspect ratios, and axes
+
+Should the axes start at 0?
+
+. . . 
+
+```{r}
+#| label: axes-zero
+#| layout-ncol: 2
+#| fig-height: 7
+plot_data <- data.frame(
+  type = factor(
+    c("Our product", "Competitor's product"),
+    levels = c("Our product", "Competitor's product")
+  ),
+  value = c(220, 210)
+)
+
+# Offset the y axis
+offset <- 208
+ggplot(plot_data) +
+  geom_col(
+    mapping = aes(x = type, y = value - offset),
+    fill = "lightblue",
+    colour = "black"
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 14, by = 2),
+    labels = seq(0 + offset, 14 + offset, by = 2),
+    expand = c(0, 0)
+  ) +
+  labs(x = "", y = "")
+
+# Original plot
+ggplot(plot_data) +
+  geom_col(
+    mapping = aes(x = type, y = value),
+    fill = "lightblue",
+    colour = "black"
+  ) +
+  scale_y_continuous(breaks = seq(0, 220, by = 20), expand = c(0, 0)) +
+  labs(x = "", y = "")
+```
+
+## Layouts, aspect ratios, and axes
+
+They don't *always* have to start at zero...
+
+```{r}
+#| label: temp
+#| fig-align: center
+#| fig-height: 7
+tsibbledata::global_economy |>
+  dplyr::filter(Country %in% c("France", "United Kingdom")) |>
+  dplyr::select(Year, Population, Country) |>
+  ggplot() +
+  geom_line(aes(x = Year, y = Population / 1000000, colour = Country)) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(y = "Population (millions)") +
+  theme(
+    legend.position = c(0.8, 0.2),
+    legend.background = element_rect(fill = "transparent"),
+    legend.key = element_rect(fill = "transparent")
+  )
+```
+
+## Layouts, aspect ratios, and axes
+
+Order categories appropriately...
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+#| label: cat-order
+#| fig-height: 7
+gap_data <- gapminder::gapminder |>
+  filter(
+    country %in% c("Germany", "France", "Finland", "Norway", "United Kingdom"),
+    year == 2007
+  )
+
+gap_data |>
+  ggplot() +
+  geom_col(aes(x = country, y = gdpPercap), fill = "slateblue") +
+  labs(x = "", y = "GDP per capita (2007)") +
+  coord_flip() 
+```
+
+:::
+
+::: {.column .fragment width="50%"}
+
+```{r}
+#| label: cat-order-2
+#| fig-height: 7
+gap_data |>
+  ggplot() +
+  geom_col(aes(x = reorder(country, gdpPercap), y = gdpPercap),
+    fill = "slateblue"
+  ) +
+  labs(x = "", y = "GDP per capita (2007)") +
+  coord_flip()
+```
+
+:::
+
+:::
+
+## Layouts, aspect ratios, and axes
+
+![](images/georgia.jpg){fig-align="center" fig-alt="Badly ordered chart of covid cases" width=60%}
+
+::: {.fragment}
+
+Order based on magnitude unless the category order has meaning...
+
+:::
+
+<small>Source: Georgia Department of Public Health</small>
+
+## Lines
+
+::: columns
+::: {.column width="50%"}
+- Suggest an order
+- Suggest continuity
+:::
+
+::: {.column width="50%"}
+```{r}
+#| label: lines
+#| fig-height: 8
+ggplot(
+  data.frame(x = c("Cheshire", "Cumbira", "Greater\nManchester", "Lancashire", "Merseyside"), y = c(1, 0.5, 2.6, 1.5, 1.35)),
+  aes(x = x, y = y)
+) +
+  geom_col() +
+  geom_line(aes(group = 1), linewidth = 1) +
+  labs(title = "(Don't do this!)", x = "", y = "Population (millions)")
+```
+:::
+:::
+
+## Legends
+
+-   Should not use up valuable space for data
+-   May be integrated into the figure
+
+```{r}
+#| label: legend1
+#| layout-ncol: 2
+#| fig-height: 7
+theme_set(theme_minimal(base_size = 22))
+x <- EuStockMarkets
+plot_data <- data.frame(
+  time = as.vector(time(x)),
+  index = rep(colnames(x), rep(nrow(x), ncol(x))),
+  value = as.vector(x),
+  stringsAsFactors = TRUE
+)
+plot_data$index2 <- plot_data$index
+
+g <- ggplot(plot_data, aes(
+  x = time, y = value,
+  group = index, color = index, label = index2
+)) +
+  geom_line() +
+  xlab("year") +
+  ylab("Stock index") +
+  scale_x_continuous(limits = c(1991, 1999),
+                     breaks = c(1992, 1995, 1998))
+g
+
+y <- plot_data[rev(order(plot_data$time)), ]
+y <- y[!duplicated(y$index), ]
+y$index2 <- y$index
+levels(y$index2)[levels(y$index2) == "FTSE"] <- "\n\nFTSE"
+
+g +
+  geom_text(data = y, hjust = "left", nudge_x = 0.1, size = 4.5) +
+  theme(legend.position = "none")
+```
+
+## Legends
+
+or use coloured fonts in the subtitle...
+
+![](https://raw.githubusercontent.com/nrennie/tidytuesday/main/2023/2023-12-26/20231226.png){fig-align="center" fig-alt="Line chart of stick performance" width="60%"}
+
+# Styling charts {background-color="#D9DBDB"}
+
+## Colours
+
+Why use colours in data visualisation?
+
+-   Colours should serve a purpose, e.g. discerning groups of data
+
+-   Colours can highlight or emphasise parts of your data.
+
+-   Not always the most effective for, e.g. communicating differences between variables.
+
+## Colours
+
+::: columns
+
+::: {.column}
+Different types of colour palettes...
+
+<br>
+
+... for different types of data.
+:::
+
+::: {.column}
+![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
+:::
+
+:::
+
+## Colours
+
+Is this a good choice of colour?
+
+```{r}
+#| label: diamonds-bar
+#| fig-width: 12
+#| fig-height: 7
+#| fig-align: center
+g <- gap_data |>
+  ggplot() +
+  geom_col(aes(x = country, y = gdpPercap, fill = country)) +
+  labs(x = "", y = "GDP per capita (2007)") +
+  coord_flip() 
+g
+```
+
+## Colours
+
+Check for colourblind friendly plots with `colorblindr::cvd_grid(g)`.
+
+```{r}
+#| label: cvd-grid
+#| fig-width: 12
+#| fig-height: 7
+#| fig-align: center
+theme_set(theme_grey(base_size = 10))
+colorblindr::cvd_grid(g)
+```
+
+## Fonts
+
+-   Font size: larger fonts are (usually) better
+
+-   Font colour: ensure sufficient contrast
+
+-   Font face: highlight text using bold font, avoid italics
+
+-   Font family: choose a clear font with distinguishable features (pick something familiar)
+
+::: {.fragment .center}
+
+There is no *perfect* font.
+
+:::
+
+## Key points
+
+* Charts should have a purpose
+
+* Actively design visualisations 
+
+* Default settings aren't always the best choices
+
+## Good charts don't have to be boring!
+
+::: columns
+::: {.column .fragment}
+![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="95%"}
+:::
+
+::: {.column .fragment}
+![Cedric Scherer (cedricscherer.com)](https://www.cedricscherer.com/img/gallery-tidytuesday//TidyTuesday_Week_2020_41_NCAA_Womens_Basketball.jpg){fig-alt="small multiples are charts of college basketball" width="90%"}
+:::
+:::
+
+## Good charts don't have to be boring!
+
+::: columns
+::: {.column width="48%"}
+![Tanya Shapiro (tanyaviz.com)](https://raw.githubusercontent.com/tashapiro/supreme-court-justices/main/plots/supreme-senate-votes.png){fig-alt="Supreme court justice chart" width="90%"}
+:::
+
+::: {.column .fragment}
+![Dan Oehm (gradientdescending.com)](https://raw.githubusercontent.com/doehm/tidytues/main/scripts/2023/week-23-energy/energy.png){fig-alt="Sloped area chart" width="100%"}
+:::
+:::
+
+## Discussion
+
+In groups, discuss how you might visualise the following data?
+
+```{r}
+#| label: scurvy-data
+library(medicaldata)
+data("scurvy")
+scurvy |>
+  kbl(format = "html") |>
+  kable_styling(
+    font_size = 22,
+    bootstrap_options = c("striped", "condensed"),
+    full_width = TRUE,
+    fixed_thead = TRUE
+  ) |>
+  column_spec(3, width = "60px") |>
+  scroll_box(height = "600px")
+```
+
+<small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
+
+```{r}
+#| label: ex-2-timer
+countdown::countdown(
+  minutes = 3,
+  color_border = "#b20e10",
+  color_text = "#b20e10",
+  color_running_text = "white",
+  color_running_background = "#b20e10",
+  color_finished_text = "#b20e10",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.5em",
+  font_size = "2em"
+)
+```
+
+## Discussion
+
+::: columns
+::: {.column}
+![Nicola Rennie (nrennie.rbind.io)](images/scurvy.png){fig-alt="Scurvy chart example" width="90%"}
+:::
+
+::: {.column .fragment}
+![Georgios Karamanis (karaman.is)](https://images.squarespace-cdn.com/content/v1/4f3f61bae4b063b909445965/beaaa852-e57f-4f94-aa09-f76bb6c0e0e4/scurvy.png){fig-alt="Split tile chart of scurvy data" width="95%"}
+:::
+:::
+
+
+# Contributing to the guide {background-color="#D9DBDB"}
+
+## Quarto
+
+::: columns
+::: {.column width="80%"}
+[Quarto is an open-source scientific and technical publishing system]{.fragment} [that allows you to combine text, images, code, plots, and tables in a fully-reproducible document.]{.fragment}
+
+[Quarto has support for multiple languages including R, Python, Julia, and Observable.]{.fragment} [It works for a range of output formats such as PDFs, HTML documents, websites, presentations,...]{.fragment}
+:::
+
+::: {.column width="20%"}
+![](images/quarto.png){fig-align="center" fig-alt="quarto hex sticker logo" width="80%"}
+:::
+:::
+
+## GitHub
+
+The source code for the guide is stored on GitHub.
+
+If you want to contribute to the guide, the easiest way is via GitHub.
+
+-   GitHub link: [github.com/royal-statistical-society/datavisguide](https://github.com/royal-statistical-society/datavisguide)
+
+-   Contributor guide: [royal-statistical-society.github.io/datavisguide/howto.html#how-to-contribute-to-this-guide](https://royal-statistical-society.github.io/datavisguide/howto.html#how-to-contribute-to-this-guide)
+
+# Read the guide: [rss.org.uk/datavisguide](https://rss.org.uk/datavisguide/) 
