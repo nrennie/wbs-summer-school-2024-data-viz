@@ -1,5 +1,5 @@
 ---
-title: "Making your data visualisations more effective"
+title: "Engaging and effective data visualisations"
 subtitle: "WBS Behavioural Science Summer School<br><small>4-5 June 2024</small>"
 author: "Dr Nicola Rennie"
 format:
