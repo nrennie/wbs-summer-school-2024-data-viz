@@ -28,7 +28,24 @@ jobs:
           
       - name: Install dependencies
         run: |
-          install.packages(c("countdown", "rmarkdown", "knitr"))
+          install.packages(c("countdown", "rmarkdown", "knitr", "ggplot2",
+          "dplyr", "tidyr", "tibble", "kableExtra", "RColorBrewer", "datasauRus",
+          "medicaldata", "remotes", "tsibbledata", "gapminder"))
+        shell: Rscript {0}
+        
+      - name: Install colorspace
+        run: |
+          install.packages("colorspace", repos = "http://R-Forge.R-project.org")
+        shell: Rscript {0}
+
+      - name: Install dev cowplot
+        run: |
+          remotes::install_github("wilkelab/cowplot")
+        shell: Rscript {0}
+
+      - name: Install non-CRAN dependencies
+        run: |
+          remotes::install_github("clauswilke/colorblindr")
         shell: Rscript {0}
 
       - name: Render and Publish
