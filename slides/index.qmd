@@ -12,6 +12,10 @@ execute:
   echo: false
   warning: false
 fig-cap-location: top
+webr:
+  packages: ['ggplot2', 'medicaldata']
+filters:
+- webr
 ---
 
 ## About me
@@ -43,66 +47,6 @@ Co-author of Royal Statistical Society's *Best Practices for Data Visualisation*
 
 :::
 
-## But first, some background!
-
-[How did the Royal Statistical Society’s Best Practices for Data Visualisation guide start?]{.fragment}
-
-[A survey in 2021 asked Royal Statistical Society (RSS) members their views on *Significance* magazine.]{.fragment}
-
-[Respondents were asked, "What aspects of content could be improved?"]{.fragment}
-
-::: incremental
--   "Better, more consistent charts... I'd like to see a house style like *The Economist*"
--   "The figures are often difficult to read..."
--   "The plots sometimes look amateurish..."
-:::
-
-## Help wanted
-
-"RSS publications seek data visualisation expert to develop best practice guidance."
-
-::: columns
-
-::: {.column width="30%"}
-
-![](images/andreas.png){fig-align="left" fig-alt="Photo of Andreas" width=70%}
-
-<small>Andreas Krause, Idorsia Pharmaceuticals</small>
-
-:::
-
-::: {.column width="30%"}
-
-![](images/nicola.jpg){fig-align="left" fig-alt="Photo of Nicola" width=70%}
-
-<small>Nicola Rennie, Lancaster University</small>
-
-:::
-
-::: {.column width="30%"}
-
-![](images/brian.png){fig-align="left" fig-alt="Photo of Brian" width=70%}
-
-<small>Brian Tarran, Royal Statistical Society</small>
-
-:::
-
-:::
-
-## What's the aim of the guide?
-
-The guide would:
-
-::: incremental
--   Help contributors develop data visualisations that are high quality, readable, effective at conveying information, and fulfill their intended purpose.
--   Summarise and link to authoritative advice on chart styles and formats for different types of data.
--   Show how to override software defaults in common data visualisation software and packages.
-:::
-
-## Skip forward quite a few months...
-
-![](images/guide-screenshot.png){fig-align="center" fig-alt="Screenshot of data vis guide homepage" width="65%"}
-
 ```{r}
 #| label: setup
 library(ggplot2)
@@ -115,7 +59,7 @@ library(datasauRus)
 theme_set(theme_grey(base_size = 18))
 ```
 
-## The rest of this talk...
+## Session outline
 
 [In this session we will cover...]{.fragment}
 
@@ -146,6 +90,79 @@ Data visualisation has two main purposes:
 ![](images/data_viz_books.png){fig-align="center" fig-alt="book shelf cartoon" width="90%"}
 :::
 :::
+
+## Why visualise data?
+
+::: columns
+::: {.column width="50%"}
+Data visualisation has two main purposes:
+
+* Exploratory data analysis and identifying data issues
+* Communicating insights and results
+
+:::
+
+::: {.column width="50%"}
+![](images/data_viz_books.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
+:::
+:::
+
+## Exploratory data visualisation
+
+Because summary statistics aren't enough...
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+dino_data <- datasaurus_dozen |>
+  filter(dataset %in% c("dino", "slant_up")) |>
+  mutate(dataset = case_when(
+    dataset == "dino" ~ "A",
+    dataset == "slant_up" ~ "B"
+  ))
+
+dino_data |>
+  group_by(dataset) |>
+  summarise(
+    mean_x = mean(x),
+    mean_y = mean(y),
+    sd_x = sd(x),
+    sd_y = sd(y),
+    cor_xy = cor(x, y)
+  ) |>
+  pivot_longer(-1, names_to = "Dataset") %>%
+  pivot_wider(names_from = 1, values_from = value) |>
+  kbl() |>
+  kable_styling("striped")
+```
+
+:::
+
+::: {.column width="50%" .fragment .center}
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+ggplot(
+  data = dino_data,
+  mapping = aes(x = x, y = y)
+) +
+  geom_point(size = 2) +
+  facet_wrap(~dataset, ncol = 2) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+:::
+:::
+
+::: {.fragment}
+
+<small>See also "A hypothesis is a liability": [genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02133-w](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02133-w)</small>
+
+:::
+
 
 ## Communicating insights with data visualisation
 
