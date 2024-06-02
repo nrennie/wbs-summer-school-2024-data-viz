@@ -69,6 +69,10 @@ section.has-dark-background a, section.has-dark-background a:hover {
   color: $body-bg;
 }
 
+section.has-light-background a, section.has-light-background a:hover {
+  color: $link-color !important;
+}
+
 .reveal .footer {
   color: #000000;
   font-family: $font-family-sans-serif;
@@ -94,6 +98,10 @@ section.has-dark-background a, section.has-dark-background a:hover {
   background: rgba(0, 0, 0, 0.2);
   color: #b20e10;
   height: 2%;
+}
+
+.left {
+  text-align: left !important
 }
 
 .right {
