@@ -15,7 +15,8 @@ fig-cap-location: top
 webr:
   packages: ['ggplot2', 'medicaldata']
 filters:
-- webr
+  - webr
+engine: knitr
 ---
 
 ## About me
@@ -91,21 +92,6 @@ Data visualisation has two main purposes:
 :::
 :::
 
-## Why visualise data?
-
-::: columns
-::: {.column width="50%"}
-Data visualisation has two main purposes:
-
-* Exploratory data analysis and identifying data issues
-* Communicating insights and results
-
-:::
-
-::: {.column width="50%"}
-![](images/data_viz_books.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
-:::
-:::
 
 ## Exploratory data visualisation
 
@@ -159,6 +145,7 @@ ggplot(
 
 ::: {.fragment}
 
+<br>
 <small>See also "A hypothesis is a liability": [genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02133-w](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02133-w)</small>
 
 :::
@@ -166,9 +153,13 @@ ggplot(
 
 ## Communicating insights with data visualisation
 
+::: {.fragment}
+
 **Grab attention**
 
 Visualisations stand out. If a reader is short on time or uncertain about whether a document is of interest, an attention-grabbing visualisation may entice them to start reading.
+
+:::
 
 ::: {.fragment}
 
@@ -306,7 +297,7 @@ facet_df <- tibble(
 )
 ggplot(facet_df, aes(x = x, fill = grp)) +
   geom_density(alpha = 0.5) +
-  labs(x = "Travel time (mins)", y = "") +
+  labs(x = "Maximum price that customer is willing to pay (£)", y = "") +
   theme(legend.title = element_blank())
 ```
 
@@ -319,7 +310,7 @@ ggplot(facet_df, aes(x = x, fill = grp)) +
 ggplot(facet_df, aes(x = x, fill = grp)) +
   geom_density(alpha = 0.5) +
   facet_wrap(~grp, nrow = 1) +
-  labs(x = "Travel time (mins)", y = "") +
+  labs(x = "Maximum price that customer is willing to pay (£)", y = "") +
   theme(legend.title = element_blank())
 ```
 
@@ -332,7 +323,7 @@ ggplot(facet_df, aes(x = x, fill = grp)) +
 ggplot(facet_df, aes(x = x, fill = grp)) +
   geom_density(alpha = 0.5) +
   facet_wrap(~grp, ncol = 1, strip.position = "left") +
-  labs(x = "Travel time (mins)", y = "") +
+  labs(x = "Maximum price that customer is willing to pay (£)", y = "") +
   theme(
     legend.title = element_blank(),
     strip.text.y.left = element_text(angle = 0)
@@ -354,9 +345,9 @@ Longer labels are best on the y-axis, horizontally.
 #| fig-height: 7
 plot_data <- gapminder::gapminder |>
   filter(continent == "Asia")
-ggplot(plot_data, aes(x = country, y = lifeExp)) +
+ggplot(plot_data, aes(x = country, y = gdpPercap)) +
   geom_boxplot() +
-  xlab("Life expectancy") +
+  xlab("GDP per capita") +
   ylab("") +
   theme_bw(base_size = 18)
 ```
@@ -371,9 +362,9 @@ ggplot(plot_data, aes(x = country, y = lifeExp)) +
 #| eval: true
 #| warning: false
 #| fig-height: 7
-ggplot(plot_data, aes(y = country, x = lifeExp)) +
+ggplot(plot_data, aes(y = country, x = gdpPercap)) +
   geom_boxplot() +
-  xlab("Life expectancy") +
+  xlab("GDP per capita") +
   ylab("") +
   theme_bw(base_size = 18)
 ```
@@ -570,6 +561,75 @@ g +
 or use coloured fonts in the subtitle...
 
 ![](https://raw.githubusercontent.com/nrennie/tidytuesday/main/2023/2023-12-26/20231226.png){fig-align="center" fig-alt="Line chart of stick performance" width="60%"}
+## Discussion 1
+
+In groups, discuss how you might visualise the following data?
+
+```{r}
+#| label: scurvy-data
+library(medicaldata)
+data("scurvy")
+scurvy |>
+  kbl(format = "html") |>
+  kable_styling(
+    font_size = 22,
+    bootstrap_options = c("striped", "condensed"),
+    full_width = TRUE,
+    fixed_thead = TRUE
+  ) |>
+  column_spec(3, width = "60px") |>
+  scroll_box(height = "600px")
+```
+
+<small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
+
+## Discussion 1
+
+* In groups, discuss how you might visualise the `scurvy` data.
+
+* Use pen and paper, R, or Python. 
+
+**R**
+
+```{r}
+#| eval: false
+#| echo: true
+library(medicaldata)
+data("scurvy")
+```
+
+**Python**
+
+```{python}
+#| eval: false
+#| echo: true
+library(medicaldata)
+data("scurvy")
+```
+
+```{r}
+#| label: ex-1-timer
+countdown::countdown(
+  minutes = 5,
+  color_border = "#b20e10",
+  color_text = "#b20e10",
+  color_running_text = "white",
+  color_running_background = "#b20e10",
+  color_finished_text = "#b20e10",
+  color_finished_background = "white",
+  top = 0,
+  margin = "0.5em",
+  font_size = "2em"
+)
+```
+
+## Discussion 1
+
+```{webr-r}
+data("scurvy")
+ggplot(scurvy) + 
+  geom_col(aes(x = study_id, y = gum_rot_d6))
+```
 
 # Styling charts {background-color="#D9DBDB"}
 
@@ -679,32 +739,20 @@ There is no *perfect* font.
 :::
 :::
 
-## Discussion
+## Discussion 2
 
-In groups, discuss how you might visualise the following data?
+* Edit this plot, or your plot from earlier to include better ... 
 
-```{r}
-#| label: scurvy-data
-library(medicaldata)
+```{webr-r}
 data("scurvy")
-scurvy |>
-  kbl(format = "html") |>
-  kable_styling(
-    font_size = 22,
-    bootstrap_options = c("striped", "condensed"),
-    full_width = TRUE,
-    fixed_thead = TRUE
-  ) |>
-  column_spec(3, width = "60px") |>
-  scroll_box(height = "600px")
+ggplot(scurvy) + 
+  geom_col(aes(x = study_id, y = gum_rot_d6))
 ```
-
-<small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
 
 ```{r}
 #| label: ex-2-timer
 countdown::countdown(
-  minutes = 3,
+  minutes = 5,
   color_border = "#b20e10",
   color_text = "#b20e10",
   color_running_text = "white",
@@ -717,7 +765,7 @@ countdown::countdown(
 )
 ```
 
-## Discussion
+## Discussion 2
 
 ::: columns
 ::: {.column}
@@ -730,30 +778,12 @@ countdown::countdown(
 :::
 
 
-# Contributing to the guide {background-color="#D9DBDB"}
+# Contact {background-color="#D9DBDB"}
 
-## Quarto
+{{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/)
 
-::: columns
-::: {.column width="80%"}
-[Quarto is an open-source scientific and technical publishing system]{.fragment} [that allows you to combine text, images, code, plots, and tables in a fully-reproducible document.]{.fragment}
+{{< fa brands github >}} [nrennie](https://github.com/nrennie)
 
-[Quarto has support for multiple languages including R, Python, Julia, and Observable.]{.fragment} [It works for a range of output formats such as PDFs, HTML documents, websites, presentations,...]{.fragment}
-:::
+{{< fa brands linkedin >}} [nicola-rennie](https://www.linkedin.com/in/nicola-rennie/)
 
-::: {.column width="20%"}
-![](images/quarto.png){fig-align="center" fig-alt="quarto hex sticker logo" width="80%"}
-:::
-:::
-
-## GitHub
-
-The source code for the guide is stored on GitHub.
-
-If you want to contribute to the guide, the easiest way is via GitHub.
-
--   GitHub link: [github.com/royal-statistical-society/datavisguide](https://github.com/royal-statistical-society/datavisguide)
-
--   Contributor guide: [royal-statistical-society.github.io/datavisguide/howto.html#how-to-contribute-to-this-guide](https://royal-statistical-society.github.io/datavisguide/howto.html#how-to-contribute-to-this-guide)
-
-# Read the guide: [rss.org.uk/datavisguide](https://rss.org.uk/datavisguide/) 
+{{< fa brands twitter >}} [@nrennie35](https://x.com/nrennie35)
