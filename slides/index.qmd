@@ -602,9 +602,7 @@ data("scurvy")
 
 **Python**
 
-```{python}
-#| eval: false
-#| echo: true
+```python
 import pandas as pd
 url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
 scurvy = pd.read_csv(url)
