@@ -4,7 +4,7 @@ subtitle: "WBS Behavioural Science Summer School<br><small>4-5 June 2024</small>
 author: "Dr Nicola Rennie"
 format:
   LUstyle-revealjs:
-    footer: "{{< fa envelope >}} [n.rennie@lancaster.ac.uk](mailto:n.rennie@lancaster.ac.uk) {{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/) {{< fa brands linkedin >}} [nicola-rennie](https://www.linkedin.com/in/nicola-rennie/)"
+    footer: "Slides: [nrennie.rbind.io/wbs-summer-school-2024-data-viz](https://nrennie.rbind.io/wbs-summer-school-2024-data-viz/)"
     self-contained: true
     auto-stretch: false
 execute: 
@@ -16,6 +16,7 @@ webr:
   packages: ['ggplot2', 'medicaldata']
 filters:
   - webr
+  - pyodide
 engine: knitr
 ---
 
@@ -561,6 +562,7 @@ g +
 or use coloured fonts in the subtitle...
 
 ![](https://raw.githubusercontent.com/nrennie/tidytuesday/main/2023/2023-12-26/20231226.png){fig-align="center" fig-alt="Line chart of stick performance" width="60%"}
+
 ## Discussion 1
 
 In groups, discuss how you might visualise the following data?
@@ -603,8 +605,9 @@ data("scurvy")
 ```{python}
 #| eval: false
 #| echo: true
-library(medicaldata)
-data("scurvy")
+import pandas as pd
+url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
+scurvy = pd.read_csv(url)
 ```
 
 ```{r}
@@ -623,7 +626,7 @@ countdown::countdown(
 )
 ```
 
-## Discussion 1
+## Discussion 1 {.scrollable}
 
 ```{webr-r}
 data("scurvy")
@@ -741,7 +744,12 @@ There is no *perfect* font.
 
 ## Discussion 2
 
-* Edit this plot, or your plot from earlier to include better ... 
+* Edit your plot of the `scurvy` data from Discussion 1 to make better use of colour, text, and styling.
+* Alternatively, edit the example plots on the next slides.
+
+## Discussion 2 {.scrollable}
+
+**R**
 
 ```{webr-r}
 data("scurvy")
@@ -765,6 +773,26 @@ countdown::countdown(
 )
 ```
 
+## Discussion 2 {.scrollable}
+
+**Python**
+
+```{pyodide-python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# read data
+url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
+scurvy = pd.read_csv(url)
+# sort symptoms
+scurvy["gum_rot_d6"] = pd.Categorical(scurvy["gum_rot_d6"], ["0_none", "1_mild", "2_moderate", "3_severe"], ordered = True)
+scurvy = scurvy.sort_values('gum_rot_d6')
+# plot
+plt.bar(scurvy['study_id'], scurvy['gum_rot_d6'], alpha=0.7, color='skyblue')
+plt.subplots_adjust(left=0.2)
+plt.show()
+```
+
 ## Discussion 2
 
 ::: columns
@@ -778,7 +806,7 @@ countdown::countdown(
 :::
 
 
-# Contact {background-color="#D9DBDB"}
+# {.left background-color="#D9DBDB"}
 
 {{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/)
 
