@@ -12,10 +12,6 @@ execute:
   echo: false
   warning: false
 fig-cap-location: top
-webr:
-  packages: ['ggplot2', 'medicaldata']
-filters:
-  - webr
 engine: knitr
 ---
 
@@ -458,7 +454,7 @@ gap_data |>
   ggplot() +
   geom_col(aes(x = country, y = gdpPercap), fill = "slateblue") +
   labs(x = "", y = "GDP per capita (2007)") +
-  coord_flip() 
+  coord_flip()
 ```
 
 :::
@@ -542,8 +538,10 @@ g <- ggplot(plot_data, aes(
   geom_line() +
   xlab("year") +
   ylab("Stock index") +
-  scale_x_continuous(limits = c(1991, 1999),
-                     breaks = c(1992, 1995, 1998))
+  scale_x_continuous(
+    limits = c(1991, 1999),
+    breaks = c(1992, 1995, 1998)
+  )
 g
 
 y <- plot_data[rev(order(plot_data$time)), ]
@@ -623,12 +621,60 @@ countdown::countdown(
 )
 ```
 
-## Discussion 1 {.scrollable}
+## Discussion 1 
 
-```{webr-r}
+```{r}
+#| output-location: column
+#| eval: true
+#| echo: true
+#| fig-height: 7
+library(ggplot2)
+library(medicaldata)
 data("scurvy")
-ggplot(scurvy) + 
+ggplot(scurvy) +
   geom_col(aes(x = study_id, y = gum_rot_d6))
+```
+
+## Discussion 1
+
+```{r}
+#| output-location: column
+#| eval: true
+#| echo: true
+#| fig-height: 7
+scurvy |>
+  tidyr::pivot_longer(
+    gum_rot_d6:lassitude_d6,
+    names_to = "symptom"
+  ) |>
+  ggplot() +
+  geom_col(aes(x = study_id, y = value,
+               fill = treatment)) +
+  facet_wrap(~symptom) +
+  theme(legend.position = "bottom")
+```
+
+## Discussion 1
+
+```{r}
+#| output-location: column
+#| eval: true
+#| echo: true
+#| fig-height: 7
+scurvy |>
+  tidyr::pivot_longer(
+    gum_rot_d6:lassitude_d6,
+    names_to = "symptom"
+  ) |>
+  ggplot() +
+  geom_col(
+    aes(
+      x = study_id, y = value,
+      fill = value %in% c("0_none", "1_mild")
+    ),
+    show.legend = FALSE
+  ) +
+  facet_wrap(~symptom)
 ```
 
 # Styling charts {background-color="#D9DBDB"}
@@ -674,7 +720,7 @@ g <- gap_data |>
   ggplot() +
   geom_col(aes(x = country, y = gdpPercap, fill = country)) +
   labs(x = "", y = "GDP per capita (2007)") +
-  coord_flip() 
+  coord_flip()
 g
 ```
 
@@ -744,16 +790,6 @@ There is no *perfect* font.
 * Edit your plot of the `scurvy` data from Discussion 1 to make better use of colour, text, and styling.
 * Alternatively, edit the code for example plots on the next slides.
 
-## Discussion 2 {.scrollable}
-
-**R**
-
-```{webr-r}
-data("scurvy")
-ggplot(scurvy) + 
-  geom_col(aes(x = study_id, y = gum_rot_d6))
-```
-
 ```{r}
 #| label: ex-2-timer
 countdown::countdown(
@@ -770,7 +806,22 @@ countdown::countdown(
 )
 ```
 
-## Discussion 2 {.scrollable}
+## Discussion 2
+
+**R**
+
+```{r}
+#| output-location: column
+#| eval: true
+#| echo: true
+library(ggplot2)
+library(medicaldata)
+data("scurvy")
+ggplot(scurvy) +
+  geom_col(aes(x = study_id, y = gum_rot_d6))
+```
+
+## Discussion 2
 
 **Python**
 
