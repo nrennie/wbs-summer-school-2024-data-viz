@@ -19,6 +19,7 @@ filters:
 engine: knitr
 ---
 
+
 ## About me
 
 ::: columns
@@ -48,6 +49,7 @@ Co-author of Royal Statistical Society's *Best Practices for Data Visualisation*
 
 :::
 
+
 ```{r}
 #| label: setup
 library(ggplot2)
@@ -59,6 +61,7 @@ library(RColorBrewer)
 library(datasauRus)
 theme_set(theme_grey(base_size = 18))
 ```
+
 
 ## Session outline
 
@@ -100,6 +103,7 @@ Because summary statistics aren't enough...
 ::: columns
 ::: {.column width="50%"}
 
+
 ```{r}
 dino_data <- datasaurus_dozen |>
   filter(dataset %in% c("dino", "slant_up")) |>
@@ -123,9 +127,11 @@ dino_data |>
   kable_styling("striped")
 ```
 
+
 :::
 
 ::: {.column width="50%" .fragment .center}
+
 
 ```{r}
 #| fig-width: 8
@@ -139,6 +145,7 @@ ggplot(
   theme_bw() +
   theme(legend.position = "none")
 ```
+
 
 :::
 :::
@@ -203,6 +210,7 @@ Snow. 1854.
 
 ::: {.column}
 
+
 ```{r}
 #| label: pie-uneven
 #| fig-height: 7
@@ -211,9 +219,11 @@ par(mai = c(0, 0, 0, 0))
 pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```
 
+
 :::
 
 ::: {.column .fragment}
+
 
 ```{r}
 #| label: pie-even
@@ -222,6 +232,7 @@ pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 par(mai = c(0, 0, 0, 0))
 pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```
+
 
 :::
 
@@ -279,6 +290,7 @@ Ask yourself:
 
 ## Layouts, aspect ratios, and axes
 
+
 ```{r}
 #| label: hist1
 #| fig-align: center
@@ -301,7 +313,9 @@ ggplot(facet_df, aes(x = x, fill = grp)) +
   theme(legend.title = element_blank())
 ```
 
+
 ## Layouts, aspect ratios, and axes
+
 
 ```{r}
 #| label: hist2
@@ -314,7 +328,9 @@ ggplot(facet_df, aes(x = x, fill = grp)) +
   theme(legend.title = element_blank())
 ```
 
+
 ## Layouts, aspect ratios, and axes
+
 
 ```{r}
 #| label: hist3
@@ -330,12 +346,14 @@ ggplot(facet_df, aes(x = x, fill = grp)) +
   )
 ```
 
+
 ## Layouts, aspect ratios, and axes
 
 Longer labels are best on the y-axis, horizontally.
 
 ::: columns
 ::: {.column width="50%"}
+
 
 ```{r}
 #| label: axes
@@ -352,9 +370,11 @@ ggplot(plot_data, aes(x = country, y = gdpPercap)) +
   theme_bw(base_size = 18)
 ```
 
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 
 ```{r}
 #| label: axes-2
@@ -369,6 +389,7 @@ ggplot(plot_data, aes(y = country, x = gdpPercap)) +
   theme_bw(base_size = 18)
 ```
 
+
 :::
 :::
 
@@ -377,6 +398,7 @@ ggplot(plot_data, aes(y = country, x = gdpPercap)) +
 Should the axes start at 0?
 
 . . . 
+
 
 ```{r}
 #| label: axes-zero
@@ -416,9 +438,11 @@ ggplot(plot_data) +
   labs(x = "", y = "")
 ```
 
+
 ## Layouts, aspect ratios, and axes
 
 They don't *always* have to start at zero...
+
 
 ```{r}
 #| label: temp
@@ -438,12 +462,14 @@ tsibbledata::global_economy |>
   )
 ```
 
+
 ## Layouts, aspect ratios, and axes
 
 Order categories appropriately...
 
 ::: columns
 ::: {.column width="50%"}
+
 
 ```{r}
 #| label: cat-order
@@ -461,9 +487,11 @@ gap_data |>
   coord_flip() 
 ```
 
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 
 ```{r}
 #| label: cat-order-2
@@ -476,6 +504,7 @@ gap_data |>
   labs(x = "", y = "GDP per capita (2007)") +
   coord_flip()
 ```
+
 
 :::
 
@@ -502,6 +531,7 @@ Order based on magnitude unless the category order has meaning...
 :::
 
 ::: {.column width="50%"}
+
 ```{r}
 #| label: lines
 #| fig-height: 8
@@ -513,6 +543,7 @@ ggplot(
   geom_line(aes(group = 1), linewidth = 1) +
   labs(title = "(Don't do this!)", x = "", y = "Population (millions)")
 ```
+
 :::
 :::
 
@@ -520,6 +551,7 @@ ggplot(
 
 -   Should not use up valuable space for data
 -   May be integrated into the figure
+
 
 ```{r}
 #| label: legend1
@@ -556,6 +588,7 @@ g +
   theme(legend.position = "none")
 ```
 
+
 ## Legends
 
 or use coloured fonts in the subtitle...
@@ -565,6 +598,7 @@ or use coloured fonts in the subtitle...
 ## Discussion 1
 
 In groups, discuss how you might visualise the following data?
+
 
 ```{r}
 #| label: scurvy-data
@@ -582,6 +616,7 @@ scurvy |>
   scroll_box(height = "600px")
 ```
 
+
 <small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
 
 ## Discussion 1
@@ -592,12 +627,14 @@ scurvy |>
 
 **R**
 
+
 ```{r}
 #| eval: false
 #| echo: true
 library(medicaldata)
 data("scurvy")
 ```
+
 
 **Python**
 
@@ -606,6 +643,7 @@ import pandas as pd
 url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
 scurvy = pd.read_csv(url)
 ```
+
 
 ```{r}
 #| label: ex-1-timer
@@ -622,6 +660,7 @@ countdown::countdown(
   font_size = "2em"
 )
 ```
+
 
 ## Discussion 1 {.scrollable}
 
@@ -665,6 +704,7 @@ Different types of colour palettes...
 
 Is this a good choice of colour?
 
+
 ```{r}
 #| label: diamonds-bar
 #| fig-width: 12
@@ -678,9 +718,11 @@ g <- gap_data |>
 g
 ```
 
+
 ## Colours
 
 Check for colourblind friendly plots with `colorblindr::cvd_grid(g)`.
+
 
 ```{r}
 #| label: cvd-grid
@@ -690,6 +732,7 @@ Check for colourblind friendly plots with `colorblindr::cvd_grid(g)`.
 theme_set(theme_grey(base_size = 10))
 colorblindr::cvd_grid(g)
 ```
+
 
 ## Fonts
 
@@ -754,6 +797,7 @@ ggplot(scurvy) +
   geom_col(aes(x = study_id, y = gum_rot_d6))
 ```
 
+
 ```{r}
 #| label: ex-2-timer
 countdown::countdown(
@@ -769,6 +813,7 @@ countdown::countdown(
   font_size = "2em"
 )
 ```
+
 
 ## Discussion 2 {.scrollable}
 
