@@ -4,7 +4,7 @@ subtitle: "WBS Behavioural Science Summer School<br><small>4-5 June 2024</small>
 author: "Dr Nicola Rennie"
 format:
   LUstyle-revealjs:
-    footer: "Slides: [nrennie.rbind.io/wbs-summer-school-2024-data-viz](https://nrennie.rbind.io/wbs-summer-school-2024-data-viz/)"
+    footer: "{{< fa brands github >}} [nrennie](https://github.com/nrennie) {{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/) {{< fa brands linkedin >}} [nicola-rennie](https://www.linkedin.com/in/nicola-rennie/) {{< fa brands twitter >}} [@nrennie35](https://x.com/nrennie35)<br>Slides: [nrennie.rbind.io/wbs-summer-school-2024-data-viz](https://nrennie.rbind.io/wbs-summer-school-2024-data-viz/)"
     self-contained: true
     auto-stretch: false
 execute: 
@@ -56,7 +56,35 @@ library(datasauRus)
 theme_set(theme_grey(base_size = 18))
 ```
 
-## Session outline
+## But first, some background!
+
+How did the Royal Statistical Society’s Best Practices for Data Visualisation guide start?
+
+[A survey in 2021 asked Royal Statistical Society (RSS) members their views on *Significance* magazine.]{.fragment}
+
+[Respondents were asked, "What aspects of content could be improved?"]{.fragment}
+
+::: incremental
+-   "Better, more consistent charts... I'd like to see a house style like *The Economist*"
+-   "The figures are often difficult to read..."
+-   "The plots sometimes look amateurish..."
+:::
+
+## What's the aim of the guide?
+
+The guide would:
+
+::: incremental
+-   Help contributors develop data visualisations that are high quality, readable, effective at conveying information, and fulfill their intended purpose.
+-   Summarise and link to authoritative advice on chart styles and formats for different types of data.
+-   Show how to override software defaults in common data visualisation software and packages.
+:::
+
+## Skip forward quite a few months...
+
+![](images/guide-screenshot.png){fig-align="center" fig-alt="Screenshot of data vis guide homepage" width="65%"}
+
+## The rest of this talk...
 
 [In this session we will cover...]{.fragment}
 
@@ -560,55 +588,33 @@ or use coloured fonts in the subtitle...
 
 ![](https://raw.githubusercontent.com/nrennie/tidytuesday/main/2023/2023-12-26/20231226.png){fig-align="center" fig-alt="Line chart of stick performance" width="60%"}
 
-## Discussion 1
-
-In groups, discuss how you might visualise the following data?
-
-```{r}
-#| label: scurvy-data
-library(medicaldata)
-data("scurvy")
-scurvy |>
-  kbl(format = "html") |>
-  kable_styling(
-    font_size = 22,
-    bootstrap_options = c("striped", "condensed"),
-    full_width = TRUE,
-    fixed_thead = TRUE
-  ) |>
-  column_spec(3, width = "60px") |>
-  scroll_box(height = "600px")
-```
-
-<small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
 
 ## Discussion 1
 
-* In groups, discuss how you might visualise the `scurvy` data.
+In groups, discuss the following chart. What is good and bad about it?
 
-* Use pen and paper, R, or Python. 
+::: columns
 
-**R**
+::: {.column}
+![](images/economist1.png){fig-align="center" fig-alt="Bar chart from the economist" width=85%}
+:::
 
-```{r}
-#| eval: false
-#| echo: true
-library(medicaldata)
-data("scurvy")
-```
+::: {.column .fragment}
+![](images/economist2.png){fig-align="center" fig-alt="Improved bar chart from the economist" width=85%}
+:::
 
-**Python**
+:::
 
-```python
-import pandas as pd
-url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
-scurvy = pd.read_csv(url)
-```
+::: {.fragment}
+
+<small>Source: <a href="https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368">medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368</a></small>
+
+:::
 
 ```{r}
 #| label: ex-1-timer
 countdown::countdown(
-  minutes = 5,
+  minutes = 3,
   color_border = "#b20e10",
   color_text = "#b20e10",
   color_running_text = "white",
@@ -619,62 +625,6 @@ countdown::countdown(
   margin = "0.5em",
   font_size = "2em"
 )
-```
-
-## Discussion 1 
-
-```{r}
-#| output-location: column
-#| eval: true
-#| echo: true
-#| fig-height: 7
-library(ggplot2)
-library(medicaldata)
-data("scurvy")
-ggplot(scurvy) +
-  geom_col(aes(x = study_id, y = gum_rot_d6))
-```
-
-## Discussion 1
-
-```{r}
-#| output-location: column
-#| eval: true
-#| echo: true
-#| fig-height: 7
-scurvy |>
-  tidyr::pivot_longer(
-    gum_rot_d6:lassitude_d6,
-    names_to = "symptom"
-  ) |>
-  ggplot() +
-  geom_col(aes(x = study_id, y = value,
-               fill = treatment)) +
-  facet_wrap(~symptom) +
-  theme(legend.position = "bottom")
-```
-
-## Discussion 1
-
-```{r}
-#| output-location: column
-#| eval: true
-#| echo: true
-#| fig-height: 7
-scurvy |>
-  tidyr::pivot_longer(
-    gum_rot_d6:lassitude_d6,
-    names_to = "symptom"
-  ) |>
-  ggplot() +
-  geom_col(
-    aes(
-      x = study_id, y = value,
-      fill = value %in% c("0_none", "1_mild")
-    ),
-    show.legend = FALSE
-  ) +
-  facet_wrap(~symptom)
 ```
 
 # Styling charts {background-color="#D9DBDB"}
@@ -787,8 +737,25 @@ There is no *perfect* font.
 
 ## Discussion 2
 
-* Edit your plot of the `scurvy` data from Discussion 1 to make better use of colour, text, and styling.
-* Alternatively, edit the code for example plots on the next slides.
+In groups, discuss how you might visualise the following data?
+
+```{r}
+#| label: scurvy-data
+library(medicaldata)
+data("scurvy")
+scurvy |>
+  kbl(format = "html") |>
+  kable_styling(
+    font_size = 22,
+    bootstrap_options = c("striped", "condensed"),
+    full_width = TRUE,
+    fixed_thead = TRUE
+  ) |>
+  column_spec(3, width = "60px") |>
+  scroll_box(height = "600px")
+```
+
+<small>A Treatise on the Scurvy in Three Parts. James Lind. 1757.</small>
 
 ```{r}
 #| label: ex-2-timer
@@ -808,39 +775,23 @@ countdown::countdown(
 
 ## Discussion 2
 
+* Use pen and paper, R, or Python. 
+
 **R**
 
 ```{r}
-#| output-location: column
-#| eval: true
+#| eval: false
 #| echo: true
-library(ggplot2)
 library(medicaldata)
 data("scurvy")
-ggplot(scurvy) +
-  geom_col(aes(x = study_id, y = gum_rot_d6))
 ```
-
-## Discussion 2
 
 **Python**
 
 ```python
 import pandas as pd
-import matplotlib.pyplot as plt
-
-# read data
 url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv'
 scurvy = pd.read_csv(url)
-
-# sort symptoms
-scurvy["gum_rot_d6"] = pd.Categorical(scurvy["gum_rot_d6"], ["0_none", "1_mild", "2_moderate", "3_severe"], ordered = True)
-scurvy = scurvy.sort_values('gum_rot_d6')
-
-# plot
-plt.bar(scurvy['study_id'], scurvy['gum_rot_d6'], alpha=0.7, color='skyblue')
-plt.subplots_adjust(left=0.2)
-plt.show()
 ```
 
 ## Discussion 2
@@ -855,13 +806,10 @@ plt.show()
 :::
 :::
 
+# Read the guide: [rss.org.uk/datavisguide](https://rss.org.uk/datavisguide/) 
 
-# {.left background-color="#D9DBDB"}
+::: {.fragment}
 
-{{< fa globe >}} [nrennie.rbind.io](https://nrennie.rbind.io/)
+Questions?
 
-{{< fa brands github >}} [nrennie](https://github.com/nrennie)
-
-{{< fa brands linkedin >}} [nicola-rennie](https://www.linkedin.com/in/nicola-rennie/)
-
-{{< fa brands twitter >}} [@nrennie35](https://x.com/nrennie35)
+:::
